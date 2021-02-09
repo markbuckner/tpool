@@ -2,7 +2,7 @@
 
 A thread pool module for simplifying multithreading code in Python.
 
-Uses a priority queue and with "runner threads" that wait infinitely for new tasks.
+Uses a priority queue with "runner threads" that wait infinitely for new tasks.
 
 
 # Usage
