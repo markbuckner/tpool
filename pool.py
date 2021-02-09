@@ -155,7 +155,7 @@ class pool:
 
         Called by the thread pool constructor, so the threads start automatically.
 
-        The runner threads wait for new tasks to execute indefinitely until ThreadPool.stop() is called.
+        The runner threads wait for new tasks to execute forever until stop() is called on the thread pool.
         """
         # Create and start threads.
         for i in range(0, self.number_of_threads):
