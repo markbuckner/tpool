@@ -21,13 +21,13 @@ def main():
     thread_pool = pool(number_of_threads=NUMBER_OF_THREADS)
     
     # Execute a function on a separate thread. Save the task id to get the return value later.
-    task_id = thread_pool.execute(hello_threading, 1, 2, 'baz')
+    task_id = thread_pool.execute(hello_threading, 1, 2, foo='baz')
     
     # Get the function's return value.
     return_value = thread_pool.get_return_value(task_id)
     
     print(return_value)
-    # (1, 2, "baz")
+    # (1, 2, 'baz')
 
 ```
 
