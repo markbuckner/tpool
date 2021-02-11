@@ -13,12 +13,11 @@ import queue
 
 # Thread pool class for simplifying setup of multi-threaded code.
 class pool:
-    """
-    Creates a thread pool that contains a specified number of threads that wait to execute target functions.
-    """
 
     def __init__(self, number_of_threads=2, max_tasks=256):
-
+        """
+        Creates a thread pool that contains a specified number of threads that wait to execute target functions.
+        """
         # Task ID counter.
         self.task_id = 0  # Initialize to zero and increment atomically for each new task.
         self.task_id_lock = threading.Lock()  # Simple lock for atomic increments.
@@ -28,6 +27,10 @@ class pool:
 
         # Dictionary for return values.
         self.return_values = {}
+
+        # Lock for return values.
+        # Note: This might not be necessary, but this code will not rely on Python's dict.pop() to be threadsafe.
+        self.return_value_lock = threading.Lock()
 
         # The number of runner threads for the pool to use.
         self.number_of_threads = number_of_threads
@@ -99,7 +102,8 @@ class pool:
                 return "UNFINISHED (timed out waiting for return value)"
 
         # Pop the return value when getting it, so the dictionary doesn't grow infinitely.
-        return self.return_values.pop(task_id)
+        with self.return_value_lock:
+            return self.return_values.pop(task_id)
 
     # Sets a flag to stop all the runner threads in the pool.
     # They will finish all current running tasks, and then not pick up another task when done.
@@ -177,4 +181,4 @@ class pool:
         elif priority == 'ultra_high':
             return 0
         else:
-            raise TypeError('Priority keyword argument must be "ultra_low", "low", "normal", "high", or "ultra_high"')
+            raise ValueError('Priority keyword argument must be "ultra_low", "low", "normal", "high", or "ultra_high"')
